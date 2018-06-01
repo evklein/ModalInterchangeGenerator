@@ -78,7 +78,6 @@ def getAllChordsInKey(key):
                     break
                     
             if chordIsNew:
-                print("new chord: " + chordToAdd + " in mode " + mode)
                 chords.append(chordToAdd + getFormattingSpace(len(chordToAdd)) + ' | ' + mode)
                 rawChords.append(chordToAdd)
 
@@ -90,18 +89,34 @@ def getAllChordsInKey(key):
 
     return chords
 
+
+def getAllChordsForKey(key, mode):
+    print('Getting all possible chords in all possible modes for the key of ' + key + ' ' + mode + '.')
+    if mode == 'major':
+        return getAllChordsInKey(key)
+    elif mode == 'minor':
+        keyIndex = 0
+        for i in range(0, len(notes)):
+            if (notes[i] == key):
+                keyIndex = i
+                break
+        keyIndex += 3
+        if (keyIndex >= len(notes)):
+            keyIndex -= len(notes)
+        return getAllChordsInKey(notes[keyIndex])
+                    
 def getFormattingSpace(strLength):
     string = ''
     for i in range(0, 5 - strLength):
         string = string + ' '
     return string
 
-print('Major')
-getMajorChords('C')
-print('\nMinor')
-getMinorChords('C')
-print('\nGet All Chords')
-chords = getAllChordsInKey('C')
-chords.sort()
-for i in range(0, len(chords)):
-    print(chords[i])
+
+while True:
+    note = input("Please enter the note: ")
+    mode = input("Please enter minor or major: ")
+    chords = getAllChordsForKey(note, mode)
+    chords.sort()
+    for i in range(0, len(chords)):
+        print(chords[i])
+    print('\n')
