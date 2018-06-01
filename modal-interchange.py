@@ -56,21 +56,16 @@ def getAllChordsInKey(key):
             keyIndex = i
             originalKeyIndex = i
 
-    chords = [key + getFormattingSpace(len(key)) + ' | Ionian']
-    rawChords = [key]
+    chords = []
+    rawChords = []
     for i in range(0, len(modes)):
-        print('Doing: ' + modes[i])
         mode = modes[i]
         intervals = modeIntervals[i]
         chordTypes = modeChordTypes[i]
         
-        for j in range(0, len(intervals) - 1):
-            keyIndex += intervals[i]
-            if (keyIndex >= len(notes)):
-                keyIndex -= len(notes)
-
+        for j in range(0, len(intervals)):
             # Search for duplicates and mark
-            chordToAdd = notes[keyIndex] + chordTypes[j + 1]
+            chordToAdd = notes[keyIndex] + chordTypes[j]
             chordIsNew = True
             for k in range(0, len(rawChords)):
                 if (rawChords[k] == chordToAdd):
@@ -83,8 +78,13 @@ def getAllChordsInKey(key):
                     break
                     
             if chordIsNew:
+                print("new chord: " + chordToAdd + " in mode " + mode)
                 chords.append(chordToAdd + getFormattingSpace(len(chordToAdd)) + ' | ' + mode)
                 rawChords.append(chordToAdd)
+
+            keyIndex += intervals[j]
+            if (keyIndex >= len(notes)):
+                keyIndex -= len(notes)
             
         keyIndex = originalKeyIndex
 
